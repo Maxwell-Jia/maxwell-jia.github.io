@@ -1,9 +1,9 @@
 ---
-title: "文章标题"
+title: "My First Post"
 date: 2024-03-21
 draft: false
-tags: ["标签"]
-categories: ["分类"]
+tags: ["test tag"]
+categories: ["test category"]
 toc: true
 ---
 
