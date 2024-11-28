@@ -127,7 +127,7 @@ params:
     emitMetadata: "1"
     inputPosition: "top"
     theme: "preferred_color_scheme"
-    lang: "zh-CN"
+    lang: "en"
     loading: "lazy"
 
 menu:
