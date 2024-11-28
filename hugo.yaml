@@ -30,7 +30,7 @@ params:
   ShowCodeCopyButtons: false
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true
-  UseHugoToc: true
+  UseHugoToc: false
   disableSpecial1stPost: false
   disableScrollToTop: false
   comments: true
@@ -163,6 +163,10 @@ markup:
     # guessSyntax: true
     # lineNos: true
     # style: monokai
+  tableOfContents:
+    startLevel: 1
+    endLevel: 6
+    ordered: false
 
 pagination:
   pagerSize: 5

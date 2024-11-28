@@ -4,7 +4,7 @@ date: 2024-03-21
 draft: false
 tags: ["test tag"]
 categories: ["test category"]
-toc: true
+hideToc: false
 ---
 
 # 一级标题

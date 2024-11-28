@@ -1,0 +1,80 @@
+{{- define "main" }}
+
+<article class="post-single">
+    <header class="post-header">
+        {{ partial "breadcrumbs.html" . }}
+        <h1 class="post-title">
+            {{ .Title }}
+            {{- if .Draft }}<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>{{- end }}
+        </h1>
+        {{- if .Description }}
+        <div class="post-description">
+            {{ .Description }}
+        </div>
+        {{- end }}
+        {{- if not (.Param "hideMeta") }}
+        <div class="post-meta">
+            {{- partial "post_meta.html" . -}}
+        </div>
+        {{- end }}
+    </header>
+
+    <div class="post-container">
+        {{- partial "toc-sidebar.html" . }}
+        
+        {{- if .Content }}
+        <div class="post-content">
+            {{- if not (.Param "disableAnchoredHeadings") }}
+            {{- partial "anchored_headings.html" .Content -}}
+            {{- else }}{{ .Content }}{{ end }}
+        </div>
+        {{- end }}
+    </div>
+
+    {{- if .Params.tags }}
+    <footer class="post-footer">
+        {{- if .Params.tags }}
+        <ul class="post-tags">
+            {{ range .Params.tags }}
+            <li><a href="{{ "tags/" | absLangURL }}{{ . | urlize }}/">{{ . }}</a></li>
+            {{ end }}
+        </ul>
+        {{- end }}
+    </footer>
+    {{- end }}
+
+    {{- if (.Param "comments") }}
+    {{- partial "comments.html" . }}
+    {{- end }}
+</article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tocLinks = document.querySelectorAll('.toc-sidebar nav#TableOfContents a');
+    const sections = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+    
+    function highlightToc() {
+        const scrollPos = window.scrollY;
+        
+        sections.forEach(section => {
+            const offset = section.offsetTop;
+            const height = section.offsetHeight;
+            
+            if (scrollPos >= offset - 100 && scrollPos < offset + height) {
+                const id = section.getAttribute('id');
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + id) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }
+    
+    window.addEventListener('scroll', highlightToc);
+    highlightToc(); // Initial highlight
+});
+</script>
+
+{{- end }} 
