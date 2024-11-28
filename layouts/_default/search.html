@@ -1,0 +1,203 @@
+{{- define "main" }}
+<header class="page-header">
+    <h1>{{ .Title }}</h1>
+</header>
+
+<div id="searchbox">
+    <input id="searchInput" autofocus placeholder="Search titles and content..." type="search" autocomplete="off">
+    <ul id="searchResults" aria-label="Search Results"></ul>
+</div>
+
+<style>
+/* Search container styles */
+#searchbox {
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 720px;
+}
+
+/* Search input styles */
+#searchInput {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--entry);
+    color: var(--primary);
+    transition: border-color 0.3s ease;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* Search results styles */
+#searchResults {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+}
+
+.post-entry {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.4rem;
+}
+
+.post-title a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    text-decoration: underline;
+}
+
+.entry-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--secondary);
+    margin: 0.8rem 0;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+mark {
+    background: #ffd76a;
+    padding: 0 3px;
+    border-radius: 3px;
+    color: inherit;
+}
+
+/* No results message */
+.no-results {
+    text-align: center;
+    color: var(--secondary);
+    margin-top: 2rem;
+    font-style: italic;
+}
+</style>
+
+<script>
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded'); // Debug log
+
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let searchData = [];
+
+    // Load search data from index.json
+    fetch('/index.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Search data loaded:', data.length, 'items'); // Debug log
+            searchData = data;
+        })
+        .catch(error => console.error('Error loading search data:', error));
+
+    // Perform search and display results
+    function performSearch(searchTerm) {
+        console.log('Searching for:', searchTerm); // Debug log
+        
+        if (!searchTerm) {
+            searchResults.innerHTML = '';
+            return;
+        }
+
+        // Filter results based on search term
+        const results = searchData.filter(item => {
+            const titleMatch = item.title?.toLowerCase().includes(searchTerm.toLowerCase());
+            const contentMatch = item.content?.toLowerCase().includes(searchTerm.toLowerCase());
+            return titleMatch || contentMatch;
+        });
+
+        console.log('Found results:', results.length); // Debug log
+
+        // Display no results message if needed
+        if (results.length === 0) {
+            searchResults.innerHTML = `
+                <div class="no-results">
+                    No results found for "${searchTerm}"
+                </div>
+            `;
+            return;
+        }
+
+        // Generate search results HTML
+        searchResults.innerHTML = results.map(item => {
+            // Extract content snippet
+            let snippet = '';
+            if (item.content) {
+                const searchTermIndex = item.content.toLowerCase().indexOf(searchTerm.toLowerCase());
+                if (searchTermIndex !== -1) {
+                    const start = Math.max(0, searchTermIndex - 100);
+                    const end = Math.min(item.content.length, searchTermIndex + 100);
+                    snippet = item.content.substring(start, end);
+                    
+                    // Add ellipsis if needed
+                    if (start > 0) snippet = '...' + snippet;
+                    if (end < item.content.length) snippet += '...';
+                    
+                    // Highlight search term
+                    const regex = new RegExp(searchTerm, 'gi');
+                    snippet = snippet.replace(regex, match => `<mark>${match}</mark>`);
+                }
+            }
+
+            // Format date if available
+            const date = item.date ? new Date(item.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : '';
+
+            return `
+                <li class="post-entry">
+                    <h2 class="post-title">
+                        <a href="${item.permalink}">${item.title}</a>
+                    </h2>
+                    <div class="entry-content">
+                        <p>${snippet}</p>
+                    </div>
+                    <div class="post-meta">
+                        ${date}
+                        ${item.reading_time ? `· ${item.reading_time} min read` : ''}
+                    </div>
+                </li>
+            `;
+        }).join('');
+    }
+
+    // Add debounce to search input
+    let debounceTimer;
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            performSearch(e.target.value);
+        }, 300); // Wait 300ms after user stops typing
+    });
+});
+</script>
+{{- end }} 

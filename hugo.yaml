@@ -36,8 +36,10 @@ params:
   comments: true
   hidemeta: false
   hideSummary: false
-  ShowToc: true
-  TocOpen: true
+  ShowToc: false
+  TocOpen: false
+  # enableSearch: true
+  # searchHidden: false
 
   assets:
     # disableHLJS: true # to disable highlight.js
@@ -47,6 +49,9 @@ params:
     favicon32x32: "<link / abs url>"
     apple_touch_icon: "<link / abs url>"
     safari_pinned_tab: "<link / abs url>"
+    disableFingerprinting: true
+    js:
+      - disable_default_search: true
 
   label:
     text: "Home"
@@ -101,19 +106,15 @@ params:
 
   # for search
   # https://fusejs.io/api/options.html
-  fuseOpts:
-    isCaseSensitive: false
-    shouldSort: true
-    location: 0
-    distance: 1000
-    threshold: 0.4
-    minMatchCharLength: 2
-    limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
-    keys: ["title", "permalink", "summary", "content"]
-
-  # 搜索配置
-  search:
-    enable: true
+  # fuseOpts:
+  #   isCaseSensitive: false
+  #   shouldSort: true
+  #   location: 0
+  #   distance: 1000
+  #   threshold: 0.4
+  #   minMatchCharLength: 2
+  #   limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
+  #   keys: ["title", "permalink", "summary", "content"]
 
   giscus:
     enable: true
@@ -128,7 +129,7 @@ params:
     inputPosition: "top"
     theme: "preferred_color_scheme"
     lang: "en"
-    loading: "lazy"
+    loading: "eager"
 
 menu:
   main:
@@ -144,10 +145,14 @@ menu:
       name: Tags
       url: /tags/
       weight: 30
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 40
     - identifier: github
       name: GitHub
       url: "https://github.com/maxwell-jia/maxwell-jia.github.io"
-      weight: 40
+      weight: 50
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
 markup:
@@ -161,3 +166,9 @@ markup:
 
 pagination:
   pagerSize: 5
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
