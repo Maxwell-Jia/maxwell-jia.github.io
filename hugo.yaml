@@ -33,7 +33,7 @@ params:
   UseHugoToc: true
   disableSpecial1stPost: false
   disableScrollToTop: false
-  comments: false
+  comments: true
   hidemeta: false
   hideSummary: false
   ShowToc: true
@@ -114,6 +114,21 @@ params:
   # 搜索配置
   search:
     enable: true
+
+  giscus:
+    enable: true
+    repo: "Maxwell-Jia/Maxwell-jia.github.io"
+    repoId: "R_kgDOM07NjA"
+    category: "Announcements"
+    categoryId: "DIC_kwDOM07NjM4CkrBZ"
+    mapping: "title"
+    strict: "0"
+    reactionsEnabled: "1"
+    emitMetadata: "1"
+    inputPosition: "top"
+    theme: "preferred_color_scheme"
+    lang: "zh-CN"
+    loading: "lazy"
 
 menu:
   main:
