@@ -131,6 +131,8 @@ params:
     lang: "en"
     loading: "eager"
 
+  math: true
+
 menu:
   main:
     - identifier: posts
@@ -156,6 +158,9 @@ menu:
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
 markup:
+  goldmark:
+    renderer:
+      unsafe: true
   highlight:
     noClasses: false
     # anchorLineNos: true
@@ -165,7 +170,7 @@ markup:
     # style: monokai
   tableOfContents:
     startLevel: 1
-    endLevel: 6
+    endLevel: 3
     ordered: false
 
 pagination:
