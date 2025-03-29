@@ -1,6 +1,6 @@
 baseURL: "https://maxwell-jia.github.io/"
 title: Maxwell HomePage
-theme: PaperMod
+theme: PaperModX
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -139,10 +139,10 @@ menu:
       name: Posts
       url: /posts/
       weight: 10
-    - identifier: categories
-      name: Categories
-      url: /categories/
-      weight: 20
+    # - identifier: categories
+    #   name: Categories
+    #   url: /categories/
+    #   weight: 20
     - identifier: tags
       name: Tags
       url: /tags/
