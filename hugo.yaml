@@ -1,11 +1,12 @@
 baseURL: "https://maxwell-jia.github.io/"
-title: Maxwell HomePage
+title: Maxwell's Forge
 theme: PaperModX
 
 enableRobotsTXT: true
 buildDrafts: false
 buildFuture: false
 buildExpired: false
+enableEmoji: true
 
 minify:
   disableXML: true
@@ -13,33 +14,37 @@ minify:
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
-  title: Maxwell HomePage
   description: "Maxwell HomePage"
-  keywords: [Blog, Portfolio, PaperMod]
   author: Maxwell Jia
   # author: ["Me", "You"] # multiple authors
   images: ["<link or path of image for opengraph, twitter-cards>"]
-  DateFormat: "January 2, 2006"
+  DateFormat: "2006-01-02"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
+  # useCustomAnalytics: true
 
   ShowReadingTime: true
-  ShowShareButtons: false
+  ShowShareButtons: true
+  ShareButtons:
+    - twitter
+    - telegram
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowCodeCopyButtons: false
+  ShowCodeCopyButtons: true
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true
-  UseHugoToc: false
   disableSpecial1stPost: false
   disableScrollToTop: false
   comments: true
   hidemeta: false
   hideSummary: false
-  ShowToc: false
-  TocOpen: false
-  # enableSearch: true
-  # searchHidden: false
+  ShowToc: true
+  TocOpen: true
+  TocSide: "left"
+  EnableInstantClick: false
+  EnableImageZoom: true
+  enableSearch: true
+  searchHidden: false
 
   assets:
     # disableHLJS: true # to disable highlight.js
@@ -52,11 +57,6 @@ params:
     disableFingerprinting: true
     js:
       - disable_default_search: true
-
-  label:
-    text: "Home"
-    icon: /apple-touch-icon.png
-    iconHeight: 35
 
   # profile-mode
   profileMode:
@@ -79,25 +79,14 @@ params:
     Content: Welcome to my blog
 
   socialIcons:
-    - name: github
+    - name: github-simple
       url: "https://github.com/maxwell-jia"
-    - name: email
-      url: "mailto:maxwelljia@gmail.com"
-    # - name: zhihu
-    #   url: "https://www.zhihu.com/people/ci-yong-hu-yi-cheng-xian-1-97"
-
-  analytics:
-    google:
-      SiteVerificationTag: "XYZabc"
-    bing:
-      SiteVerificationTag: "XYZabc"
-    yandex:
-      SiteVerificationTag: "XYZabc"
-
-  cover:
-    hidden: true # hide everywhere but not in structured data
-    hiddenInList: true # hide on list pages and home
-    hiddenInSingle: true # hide on single page
+    - name: rss-simple
+      url: "feed.xml"
+    # - name: email
+      # url: "mailto:maxwelljia@gmail.com"
+    # - name: zhihu-simple
+      # url: "https://www.zhihu.com/people/ci-yong-hu-yi-cheng-xian-1-97"
 
   editPost:
     URL: "https://github.com/<path_to_repo>/content"
@@ -139,13 +128,13 @@ menu:
       name: Posts
       url: /posts/
       weight: 10
-    # - identifier: categories
-    #   name: Categories
-    #   url: /categories/
-    #   weight: 20
     - identifier: tags
       name: Tags
       url: /tags/
+      weight: 20
+    - identifier: archives
+      name: Archives
+      url: /archives/
       weight: 30
     - identifier: search
       name: Search
@@ -157,24 +146,15 @@ menu:
       weight: 50
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
+
 markup:
   goldmark:
     renderer:
       unsafe: true
   highlight:
+    style: dracula
+    lineNos: false
     noClasses: false
-    # anchorLineNos: true
-    # codeFences: true
-    # guessSyntax: true
-    # lineNos: true
-    # style: monokai
-  tableOfContents:
-    startLevel: 1
-    endLevel: 3
-    ordered: false
-
-pagination:
-  pagerSize: 5
 
 outputs:
   home:

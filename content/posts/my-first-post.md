@@ -1,5 +1,5 @@
 ---
-title: "Mask Dice Loss: A Novel Solution for Imbalanced Time-Series Anomaly Detection"
+title: "Mask Dice Loss:"
 date: 2024-03-21
 draft: true
 tags: ["time-series"]
@@ -20,3 +20,8 @@ In this post, we will focus on the problem of detecting stellar flares.
 
 The crux of our task lies in predicting the probability that each flux value in a given light curve belongs to a flare event. To accomplish this, we employ neural networks denoted by $f(X|\Theta)$, where $X=\lbrace x_i \in \mathbb{R} \mid i=1, 2, \cdots, T\rbrace$ represents the input light curve with a length of $T$. Our objective is to generate a probability vector $P=\lbrace p_i \in [0, 1] \mid i=1, 2, \cdots, T\rbrace$, where $p_i$ signifies the likelihood that the flux value $x_i$ is part of a flare event.
 
+## test
+
+# hhsh
+
+# ohio
