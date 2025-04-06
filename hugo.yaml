@@ -1,5 +1,5 @@
 baseURL: "https://maxwell-jia.github.io/"
-title: Maxwell's Forge
+title: Maxwell's Blog
 theme: PaperModX
 
 enableRobotsTXT: true
@@ -14,7 +14,7 @@ minify:
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
-  description: "Maxwell HomePage"
+  description: "Maxwell's Blog"
   author: Maxwell Jia
   # author: ["Me", "You"] # multiple authors
   images: ["<link or path of image for opengraph, twitter-cards>"]
@@ -76,7 +76,7 @@ params:
   # home-info mode
   homeInfoParams:
     Title: "Hi there \U0001F44B"
-    Content: Welcome to my blog
+    Content: Welcome to my blog! I'm Maxwell, a passionate developer sharing thoughts on technology, programming, and more. Feel free to explore my posts and projects. Thanks for visiting!
 
   socialIcons:
     - name: github-simple
@@ -144,6 +144,7 @@ menu:
       name: GitHub
       url: "https://github.com/maxwell-jia/maxwell-jia.github.io"
       weight: 50
+      post: <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
 
