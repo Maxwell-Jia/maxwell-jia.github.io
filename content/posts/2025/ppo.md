@@ -1,15 +1,17 @@
 ---
 title: "Recontextualizing Proximal Policy Optimization (PPO) for LLM Alignment"
-date: 2025-04-05
+date: 2025-04-06
 draft: false
 tags: ["RLHF"]
 hideToc: false
 math: true
 ---
 
-TD;DR: TODO
+## TD;DR
 
-**Note:** Before we divide into details, it's important to have a basic understanding  of reinforcement learning and PPO algorithm.
+This blog provides an overview of Proximal Policy Optimization (PPO) for reinforcement learning, detailing the optimization of policy and value models. Key concepts include Generalized Advantage Estimation (GAE), entropy regularization, and KL divergence, all aimed at ensuring stable and effective training. A pseudocode implementation of the PPO training pipeline is also presented.
+
+**Note: Before we dive into the details, it's essential to have a basic understanding of reinforcement learning and the Proximal Policy Optimization (PPO) algorithm in non-LLM context.**
 
 ## Theory
 
@@ -98,7 +100,7 @@ In this equation, $\pi _{\theta _{ref}}$ represents the reference policy, while 
 
 ### Optimize Value Model
 
-n the PPO framework, the value model plays a crucial role in estimating the expected future rewards for each state. A well-optimized value model helps reduce the variance in policy updates and enhances training efficiency.
+In the PPO framework, the value model plays a crucial role in estimating the expected future rewards for each state. A well-optimized value model helps reduce the variance in policy updates and enhances training efficiency.
 
 The parameters of the value model are optimized by minimizing the mean squared error between the predicted values and the target returns. This optimization is performed token by token, similar to the process used for policy optimization.
 
@@ -119,14 +121,14 @@ This approach enables the value model to better approximate the true value funct
 
 ## Implementation
 
-TODO
+Now, let's implement the PPO training pipeline. I will use pseudocode to illustrate the training process.
 
-We have get the priliminary knowledge of ppo in llm. Now let's implement the ppo training pipeline. I'll use pseudocode to show the training process.
+### Pipeline Overview
 
-Step 1, we initialize all the models we want to train.
+We build the code from top to bottom, starting with the initialization of all the models and the data loader. For simplicity, we will use a rule-based reward function similar to what is done in Deepseek-R1. After that, we will present the overall training loop.
 
 ```python
-# load llm model
+# load policy model
 actor = load_policy_model()
 # clone a ref model
 ref_model = copy.deepcopy(actor)
@@ -134,18 +136,105 @@ ref_model = copy.deepcopy(actor)
 critic = load_value_model()
 # define reward function
 reward_fn = define_reward_function()
-```
+# define dataloader
+dataloader = load_dataloader()
 
-Step 2, we define the training loop. We first present the overall framework here so that we can have a comprehensive understanding of the training process.
-
-```python
+# the main training loop
 for epoch in range(total_epochs):
     for batch in dataloader:
         # 1. rollout
-        # 2. compute reward
-        # 3. update value model
-        # 4. update policy model
+        gen_batch_output = actor.generate(batch)
+        # we also compute the log probs of the old policy and ref policy
+        old_log_probs = actor.compute_log_probs(gen_batch_output, batch)
+        ref_log_probs = ref_model.compute_log_probs(gen_batch_output, batch)
+
+        # 2. compute values
+        values = critic.compute_values(gen_batch_output, batch)
+        
+        # 3. compute reward scores
+        rewards = reward_fn(gen_batch_output, batch)
+        
+        # 4. compute advantages and returns
+        advantages = compute_gae(rewards, values)
+        returns = advantages + values  # Simplified version
+        
+        # 5. update value model
+        for _ in range(value_updates_epochs):
+            for micro_batch in gen_batch_output:
+                value_loss = update_critic(critic, returns, micro_batch)
+        
+        # 6. update policy model
+        for _ in range(policy_updates_epochs):
+            for micro_batch in gen_batch_output:
+                policy_loss, kl_penalty = update_actor(
+                    actor, ref_model, critic, 
+                    micro_batch, old_log_probs, 
+                    advantages, returns
+                )
 ```
 
-Reference:
-- https://huggingface.co/blog/NormalUhr/rlhf-pipeline
+### Advantage Computation
+
+We use Generalized Advantage Estimation (GAE) to balance bias-variance tradeoff:
+
+```python
+def compute_gae(rewards, values, gamma=0.99, lam=0.95):
+    deltas = rewards + gamma * values[1:] - values[:-1]
+    advantages = []
+    advantage = 0
+    for delta in reversed(deltas):
+        advantage = delta + gamma * lam * advantage
+        advantages.insert(0, advantage)
+    return advantages
+```
+
+### Value Model Update
+
+The value model is updated as follows:
+
+```python
+def update_critic(critic, returns, batch):
+    current_values = critic.compute_values(batch)
+    loss = mse_loss(current_values, returns)
+    loss.backward()
+    optimizer_critic.step()
+    return loss
+```
+
+### Policy Model Update
+
+The policy model is updated as follows:
+
+```python
+def update_actor(actor, ref_model, critic, batch, old_log_probs, advantages):
+    # Get new policy's log probabilities
+    new_log_probs = actor.compute_log_probs(batch)
+    
+    # Compute probability ratio
+    ratio = (new_log_probs - old_log_probs).exp()
+    
+    # Compute clipped surrogate loss
+    clip_epsilon = 0.2
+    surrogate1 = ratio * advantages
+    surrogate2 = ratio.clamp(1-clip_epsilon, 1+clip_epsilon) * advantages
+    policy_loss = -torch.min(surrogate1, surrogate2).mean()
+    
+    # Add entropy bonus
+    entropy_bonus = 0.01 * compute_entropy(new_log_probs)
+    
+    # Add KL penalty against reference model
+    kl_div = compute_kl_divergence(actor, ref_model, batch)
+    kl_penalty = 0.1 * kl_div
+    
+    total_loss = policy_loss - entropy_bonus + kl_penalty
+    total_loss.backward()
+    optimizer_actor.step()
+    
+    return policy_loss, kl_penalty
+```
+
+## Reference
+
+- [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)
+- [PPO Algorithm](https://medium.com/@danushidk507/ppo-algorithm-3b33195de14a)
+- [Proximal Policy Optimization (PPO)](https://huggingface.co/blog/deep-rl-ppo)
