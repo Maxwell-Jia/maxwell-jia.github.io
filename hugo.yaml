@@ -8,13 +8,20 @@ buildFuture: false
 buildExpired: false
 enableEmoji: true
 
+# 添加sitemap配置
+sitemap:
+  changefreq: weekly
+  filename: sitemap.xml
+  priority: 0.5
+
 minify:
   disableXML: true
   minifyOutput: true
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
-  description: "Maxwell's Blog"
+  description: "Maxwell's personal blog sharing thoughts on technology, programming, and more."
+  keywords: ["blog", "technology", "programming", "Maxwell Jia"]
   author: Maxwell Jia
   # author: ["Me", "You"] # multiple authors
   images: ["<link or path of image for opengraph, twitter-cards>"]
@@ -22,6 +29,14 @@ params:
   defaultTheme: auto # dark, light
   disableThemeToggle: false
   # useCustomAnalytics: true
+  
+  # 添加OpenGraph和Schema相关配置
+  opengraph:
+    enable: true
+  
+  schema:
+    publisherType: Person
+    enable: true
 
   ShowReadingTime: true
   ShowShareButtons: true
