@@ -54,6 +54,20 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
+      - name: Additional Debug - Check Hugo template lookup paths
+        run: |
+          echo "Creating debug template overrides to test template lookup:"
+          mkdir -p layouts/_default/
+          echo '{{ printf "Found _default template" }}' > layouts/_default/baseof.html
+          mkdir -p layouts/partials/templates/
+          echo '{{ printf "Found schema_json template" }}' > layouts/partials/templates/schema_json.html
+          echo "Checking layouts directory structure:"
+          find layouts -type f | sort
+          echo "Hugo version details:"
+          hugo version
+          echo "Hugo env details:"
+          hugo env
+          
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
