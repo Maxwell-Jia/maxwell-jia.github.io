@@ -37,6 +37,17 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Debug - Check theme files
+        run: |
+          echo "Listing .gitmodules content:"
+          cat .gitmodules
+          echo "Checking git submodule status:"
+          git submodule status
+          echo "Listing theme directories:"
+          ls -la themes/
+          echo "Checking theme templates directory:"
+          ls -la themes/PaperModX/layouts/partials/templates/ || echo "Directory not found"
+          
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
