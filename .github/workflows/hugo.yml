@@ -37,30 +37,12 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Debug - Check theme files
-        run: |
-          echo "Listing .gitmodules content:"
-          cat .gitmodules
-          echo "Checking git submodule status:"
-          git submodule status
-          echo "Listing theme directories:"
-          ls -la themes/
-          echo "Checking theme templates directory:"
-          ls -la themes/PaperModX/layouts/partials/templates/ || echo "Directory not found"
-          
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.145.0'
           extended: true
 
-      - name: Additional Debug - Print Hugo info
-        run: |
-          echo "Hugo version details:"
-          hugo version
-          echo "Hugo env details:"
-          hugo env
-          
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
@@ -78,16 +60,6 @@ jobs:
           hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
-      - name: Debug Build Output
-        run: |
-          echo "Checking build output structure..."
-          ls -la ./public
-          echo "Checking CSS files..."
-          ls -la ./public/css || true
-          echo "Checking custom CSS..."
-          ls -la ./public/css/extended || true
-          echo "Checking index.html..."
-          ls -la ./public/index.html || true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
