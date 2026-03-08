@@ -1,6 +1,7 @@
 baseURL: "https://maxwell-jia.github.io/"
 title: Maxwell's Blog
 theme: PaperModX
+languageCode: en-us
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -15,7 +16,7 @@ sitemap:
   priority: 0.5
 
 minify:
-  disableXML: true
+  disableXML: false
   minifyOutput: true
 
 params:
@@ -24,7 +25,7 @@ params:
   keywords: ["blog", "technology", "programming", "Maxwell Jia"]
   author: Maxwell Jia
   # author: ["Me", "You"] # multiple authors
-  images: ["<link or path of image for opengraph, twitter-cards>"]
+  images: []
   DateFormat: "2006-01-02"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
